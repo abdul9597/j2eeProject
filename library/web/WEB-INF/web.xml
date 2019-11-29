@@ -8,6 +8,10 @@
         <servlet-name>UserActivity</servlet-name>
         <servlet-class>esiee.grit.UserActivity</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Dispatch</servlet-name>
+        <servlet-class>esiee.grit.Dispatch</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Authentification</servlet-name>
         <url-pattern>/Authentification</url-pattern>
@@ -15,6 +19,10 @@
     <servlet-mapping>
         <servlet-name>UserActivity</servlet-name>
         <url-pattern>/UserActivity</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Dispatch</servlet-name>
+        <url-pattern>/Dispatch</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

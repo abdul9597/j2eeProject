@@ -7,6 +7,11 @@ package esiee.grit;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -39,10 +44,170 @@ public class UserActivity extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet UserActivity at " + request.getContextPath() + "</h1>");
+            
+            out.println("<br>");
+            out.println("<br>");
+           
+        String nomDriver="org.apache.derby.jdbc.ClientDriver";
+        String urlBD="jdbc:derby://localhost:1527/libraryBDD";
+
+        
+        try{  
+            Class.forName(nomDriver);
+        }catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.exit(-1);
+        }
+        
+        Connection cnx = null;
+        
+        try {
+            cnx = DriverManager.getConnection(urlBD);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.exit(-1);
+        }
+        
+        Statement stmt = null;
+        
+        try {
+            stmt = cnx.createStatement() ;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.exit(-1);
+        }
+        
+        String sql =  "SELECT * FROM BIBLIOTHEQUE";
+        ResultSet res = null;
+        
+        try {
+             res = stmt.executeQuery(sql) ;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.exit(-1);
+        }
+        
+        
+        String pseudo = "admin";
+        
+        
+        try {
+            out.println("<h1>Liste des livres</h1>");
+            out.println("<table border=6 cellspacing=12><tr> <td>Nom du livre</td> <td>Quantité disponible</td></tr>");
+            while (res.next()) {
+                out.print("<tr><td>"+res.getString("NOM")+"</td><td>"+res.getString("QUANTITE")+"</td>");
+                
+//                out.println("<td><input type=\"button\" name="+res.getString("NOM")+" value=\"empreinter\"></td></tr>");
+                
+               out.println("<td><form action=/library/Dispatch method=Post><input name=\"nom\" value=\""+res.getString("NOM")+"\" type =\"hidden\"/><input name=\"pseudo\" value=\""+pseudo+"\" type =\"hidden\"/> "
+                       +"<input name=\"option\" value=\"emprunt\" type =\"hidden\"/>"
+                       + "<input type = submit value = empreinter />"
+                       + " </form></td></tr>");
+                
+                
+                
+//                  String resql =  "UPDATE Into BIBLIOTHEQUE VALUES"+"(,12.5,'2019-11-21')" ;
+//                int rs = 999;
+//                try {
+//                    rs = stmt.executeUpdate(resql);
+//                } catch (SQLException ex) {
+//                    ex.printStackTrace();
+//                    System.exit(-1);
+//                }
+            }
+            
+            out.println("</table>");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.exit(-1);
+        }
+        
+        String sql2 =  "SELECT * FROM EMPRUNTS WHERE PSEUDO = '"+pseudo+"'";
+        ResultSet res2 = null;
+        
+        try {
+             res2 = stmt.executeQuery(sql2) ;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.exit(-1);
+        }
+        
+        try {
+            out.println("<h1>Mes emprunts</h1>");
+            out.println("<table border=6 cellspacing=12><tr> <td>Pseudo</td><td>Nom du livre</td> <td>Quantité disponible</td><td></td></tr>");
+            while (res2.next()) {
+                out.print("<tr><td>"+res2.getString("PSEUDO")+"</td><td>"+res2.getString("LIVRE")+"</td><td>"+res2.getString("QUANTITE")+"</td>");
+//                out.println("<td><input type=\"button\" name="+res2.getString("PSEUDO")+" value=\"rendre\"></td></tr>");
+            
+            out.println("<td><form action=/library/Dispatch method=Post><input name=\"nom\" value=\""+res2.getString("LIVRE")+"\" type =\"hidden\"/> <input name=\"pseudo\" value=\""+res2.getString("PSEUDO")+"\" type =\"hidden\"/> "
+                       +"<input name=\"option\" value=\"rendre\" type =\"hidden\"/>"
+                       + "<input type = submit value = rendre />"
+                       + " </form></td></tr>");
+            
+            }
+            
+            out.println("</table>");
+            
+          
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.exit(-1);
+        }
+        
+        
+        if(pseudo.equalsIgnoreCase("admin")){
+            
+          
+          
+         sql2 =  "SELECT * FROM EMPRUNTS WHERE PSEUDO = '"+pseudo+"'";
+         res2 = null;
+        
+        try {
+             res2 = stmt.executeQuery(sql2) ;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.exit(-1);
+        }
+        
+        try {
+            out.println("<h1>Les livres empruntés de la librairie</h1>");
+            out.println("<table border=6 cellspacing=12><tr> <td>Pseudo</td><td>Nom du livre</td> <td>Quantité disponible</td></tr>");
+            while (res2.next()) {
+                out.print("<tr><td>"+res2.getString("PSEUDO")+"</td><td>"+res2.getString("LIVRE")+"</td><td>"+res2.getString("QUANTITE")+"</td></tr>");
+//                out.println("<td><input type=\"button\" name="+res2.getString("PSEUDO")+" value=\"rendre\"></td></tr>");
+
+            
+            }
+            
+            out.println("</table>");
+            
+          
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.exit(-1);
+        }
+          
+         }
+             
+        try {
+            cnx.close();
+            stmt.close();
+            res.close();
+            res2.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(-1);
+        } 
+            
+             
             out.println("</body>");
             out.println("</html>");
+            
+            
         }
-    }
+   
+        }  
+
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
