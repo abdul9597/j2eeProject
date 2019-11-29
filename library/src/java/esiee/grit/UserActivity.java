@@ -88,7 +88,7 @@ public class UserActivity extends HttpServlet {
         }
         
         
-        String pseudo = "admin";
+        String pseudo = request.getParameter("pseudo");
         
         
         try {
