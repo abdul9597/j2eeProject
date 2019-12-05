@@ -117,7 +117,8 @@ public class Dispatch extends HttpServlet {
              try{
                  boolean exist =false;
                  while (res.next()){
-                        res.updateInt("quantite", res.getInt("quantite")+1); 
+                       sql = "UPDATE EMPRUNTS SET quantite = quantite + 1 WHERE livre ='"+nom+"' AND pseudo ='"+pseudo+"'";
+                       rs = stmt.executeUpdate(sql);
                         exist =true;
                     }
                    if (!exist){
@@ -136,13 +137,11 @@ public class Dispatch extends HttpServlet {
                  String sql;
                  String sql2;
                 
-                sql ="SELECT quantite FROM EMPRUNTS WHERE livre ='"+nom+"' AND pseudo ='"+pseudo+"' AND quantite =1";
-                sql2= "SELECT quantite FROM EMPRUNTS WHERE livre ='"+nom+"' AND pseudo ='"+pseudo+"' AND quantite > 1";
+                sql ="SELECT quantite FROM EMPRUNTS WHERE livre ='"+nom+"' AND pseudo ='"+pseudo+"'";
      
                 try {
                     
                      res = stmt.executeQuery(sql) ;
-                     res2 = stmt.executeQuery(sql2) ;
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                     System.exit(-1);
@@ -151,17 +150,31 @@ public class Dispatch extends HttpServlet {
                 int quantite = 0;
                 try {
                     while (res.next()){
-                        res.deleteRow();  
+                        quantite = res.getInt("quantite");    
                     }
-                    if((res2 != null))
-                    {
-                        while (res2.next()){
-                        res2.updateInt("quantite", res2.getInt("quantite")+1);  
-                        }
-                    }             
                 } catch (SQLException ex) {
                     Logger.getLogger(Dispatch.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                
+                if(quantite >1){
+                    sql = "UPDATE EMPRUNTS SET quantite = quantite - 1 WHERE livre ='"+nom+"' AND pseudo ='"+pseudo+"'";
+                     try {
+                         int rs = stmt.executeUpdate(sql);
+                     } catch (SQLException ex) {
+                         Logger.getLogger(Dispatch.class.getName()).log(Level.SEVERE, null, ex);
+                     }
+                }
+                
+                if(quantite==1){
+                    sql = "DELETE FROM EMPRUNTS WHERE livre ='"+nom+"' AND pseudo ='"+pseudo+"'";
+                     try {
+                         int rs = stmt.executeUpdate(sql);
+                     } catch (SQLException ex) {
+                         Logger.getLogger(Dispatch.class.getName()).log(Level.SEVERE, null, ex);
+                     }
+                }
+                
+               
                 
                 
             String resql =  "UPDATE BIBLIOTHEQUE SET quantite = quantite + 1 WHERE nom='"+nom+"'";
@@ -185,15 +198,14 @@ public class Dispatch extends HttpServlet {
             out.println("<body>");
             out.println("<h1>Servlet Dispatch at " + request.getContextPath() + "</h1>");
             
-            out.println("votre option est "+option);
-            if(option=="rendre"){
+            if(option.equals("rendre")){
             out.println("<script type=\"text/javascript\">");
-            out.println("alert('Votre livre est rendu');");
+            //out.println("alert('Votre livre est rendu');");
             out.println("location='UserActivity?pseudo="+pseudo+"';");
             out.println("</script>");
-            }else if(option == "emprunt"){
+            }else if(option.equals("emprunt")){
             out.println("<script type=\"text/javascript\">");
-            out.println("alert('Votre livre est emprunté');");
+            //out.println("alert('Votre livre est emprunté');");
             out.println("location='UserActivity?pseudo="+pseudo+"';");
             out.println("</script>");
             }

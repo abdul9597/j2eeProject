@@ -139,8 +139,6 @@ public class Authentification extends HttpServlet {
                  out.println("alert('Pseudo non disponible');");
                  out.println("location='index.html';");
                  out.println("</script>");
-                 
-                
             }else if (acces==3){
                 out.println("<script type=\"text/javascript\">");
                  out.println("alert('Utilisateur Cree');");

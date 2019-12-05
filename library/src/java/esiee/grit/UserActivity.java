@@ -130,8 +130,7 @@ public class UserActivity extends HttpServlet {
             out.println("<td><form action=/library/Dispatch method=Post><input name=\"nom\" value=\""+res2.getString("LIVRE")+"\" type =\"hidden\"/> <input name=\"pseudo\" value=\""+res2.getString("PSEUDO")+"\" type =\"hidden\"/> "
                        +"<input name=\"option\" value=\"rendre\" type =\"hidden\"/>"
                        + "<input type = submit value = rendre />"
-                       + " </form></td></tr>");
-            
+                       + "</form></td></tr>");
             }
             
             out.println("</table>");
@@ -145,7 +144,7 @@ public class UserActivity extends HttpServlet {
         
         if(pseudo.equalsIgnoreCase("admin")){
                    
-         sql2 =  "SELECT * FROM EMPRUNTS WHERE PSEUDO = '"+pseudo+"'";
+         sql2 =  "SELECT * FROM EMPRUNTS ";
          res2 = null;
         
         try {
@@ -183,15 +182,14 @@ public class UserActivity extends HttpServlet {
             e.printStackTrace();
             System.exit(-1);
         } 
-            
-             
+
             out.println("</body>");
             out.println("</html>");
             
             
         }
    
-        }  
+        }
 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
