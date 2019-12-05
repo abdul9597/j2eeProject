@@ -96,24 +96,12 @@ public class UserActivity extends HttpServlet {
             out.println("<table border=6 cellspacing=12><tr> <td>Nom du livre</td> <td>Quantité disponible</td></tr>");
             while (res.next()) {
                 out.print("<tr><td>"+res.getString("NOM")+"</td><td>"+res.getString("QUANTITE")+"</td>");
-                
-//                out.println("<td><input type=\"button\" name="+res.getString("NOM")+" value=\"empreinter\"></td></tr>");
-                
+                 
                out.println("<td><form action=/library/Dispatch method=Post><input name=\"nom\" value=\""+res.getString("NOM")+"\" type =\"hidden\"/><input name=\"pseudo\" value=\""+pseudo+"\" type =\"hidden\"/> "
                        +"<input name=\"option\" value=\"emprunt\" type =\"hidden\"/>"
                        + "<input type = submit value = empreinter />"
                        + " </form></td></tr>");
                 
-                
-                
-//                  String resql =  "UPDATE Into BIBLIOTHEQUE VALUES"+"(,12.5,'2019-11-21')" ;
-//                int rs = 999;
-//                try {
-//                    rs = stmt.executeUpdate(resql);
-//                } catch (SQLException ex) {
-//                    ex.printStackTrace();
-//                    System.exit(-1);
-//                }
             }
             
             out.println("</table>");
@@ -134,7 +122,7 @@ public class UserActivity extends HttpServlet {
         
         try {
             out.println("<h1>Mes emprunts</h1>");
-            out.println("<table border=6 cellspacing=12><tr> <td>Pseudo</td><td>Nom du livre</td> <td>Quantité disponible</td><td></td></tr>");
+            out.println("<table border=6 cellspacing=12><tr> <td>Pseudo</td><td>Nom du livre</td> <td>Quantité disponible</td></tr>");
             while (res2.next()) {
                 out.print("<tr><td>"+res2.getString("PSEUDO")+"</td><td>"+res2.getString("LIVRE")+"</td><td>"+res2.getString("QUANTITE")+"</td>");
 //                out.println("<td><input type=\"button\" name="+res2.getString("PSEUDO")+" value=\"rendre\"></td></tr>");
@@ -156,9 +144,7 @@ public class UserActivity extends HttpServlet {
         
         
         if(pseudo.equalsIgnoreCase("admin")){
-            
-          
-          
+                   
          sql2 =  "SELECT * FROM EMPRUNTS WHERE PSEUDO = '"+pseudo+"'";
          res2 = null;
         
@@ -176,7 +162,6 @@ public class UserActivity extends HttpServlet {
                 out.print("<tr><td>"+res2.getString("PSEUDO")+"</td><td>"+res2.getString("LIVRE")+"</td><td>"+res2.getString("QUANTITE")+"</td></tr>");
 //                out.println("<td><input type=\"button\" name="+res2.getString("PSEUDO")+" value=\"rendre\"></td></tr>");
 
-            
             }
             
             out.println("</table>");
